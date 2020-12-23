@@ -4,4 +4,6 @@
 rssmanager는 rss들을 더하고, 수정하고, 삭제하는 등의 행위를 한다.
 지금은 file io를 사용하고있는데 DB로 바꿔야겠다.
 
+flask 공부..
+
 ing
