@@ -4,6 +4,17 @@
 rssmanager는 rss들을 더하고, 수정하고, 삭제하는 등의 행위를 한다.
 지금은 file io를 사용하고있는데 DB로 바꿔야겠다.
 
-flask 공부..
+<h3>DB</h3>
+```
+- *rss: 어디서 파싱했는지 
+- name: 누가 이 글을 썻는지
+- text: 글 내용 보기
+- published: 최신 글 날짜(?)
+```
 
-ing
+<h3>architecture</h3>
+- rssparser
+- rssmanager
+- router (flask)
+- DB
+
