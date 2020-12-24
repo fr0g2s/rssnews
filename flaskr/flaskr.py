@@ -12,7 +12,7 @@ def init_db():
         db.commit()
     
 def connect_db():
-    return sqlite3.connect('/tmp/flaskr.db')
+    return sqlite3.connect(app.config['DATABASE'])
 
 @app.route('/')
 def show_entries():
@@ -59,7 +59,7 @@ def teardown_request(exception):
     g.db.close()
 
 if __name__ == '__main__':
-    app.config.from_envvar("FLASKR_SETTINGS", silent=True)
+    app.config.from_object('config')
     app.debug = True
    
     init_db()
