@@ -3,11 +3,6 @@ import rssparser
 class RssManager:
     def __init__(self):
         self.url_list = []
-        with open('./url_list.txt','r') as f:
-            for url in f.read().split('\n'):
-                if url == '':
-                    continue
-                self.url_list.append(url)
 
     def getRssList(self):
         return self.url_list
