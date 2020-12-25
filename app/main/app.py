@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def show_main():
-    return render_template('/index.html')
+    return render_template('/show_articles.html')
 
 @app.route('/add', method=['GET'])
 def add_rss(rss):

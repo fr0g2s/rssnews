@@ -1,0 +1,23 @@
+<!-- this is skeleton -->
+
+<!doctype html>
+<html>
+<head>
+    <meta encoding="utf-8">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    <title>rssnews</title>
+</head>
+
+
+<body>
+<div class=page>
+    <h1>new article</h1>
+
+    {% for message in get_flashed_message() %}
+        <div class=flash>{{ message }}</div>
+    {% endfor %}
+    {% block body %}
+    {% endblock %}
+</div>
+</body>
+</html>

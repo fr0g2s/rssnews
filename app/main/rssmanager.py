@@ -1,52 +1,43 @@
 import rssparser
+import sqlite3
 
 class RssManager:
     def __init__(self):
-        self.url_list = []
+        pass
 
-    def getRssList(self):
-        return self.url_list
+    def getArticles(self, db):   # 
+        cur = db.execute('select author, title, description, url, published from articles order by id desc')
+        articles = [dict(
+                        author=row[0], 
+                        title=row[1], 
+                        description=row[2], 
+                        url=row[3], 
+                        published=row[4]
+                        ) for row in cur.fetchall()]
+        db.commit()
+        return articles
 
-    def delRss(self, del_rss):
-        if not self.__isExist(del_rss):
-            raise Exception('no RSS to delete')
-        self.__updateRssStore('del', del_rss)
+    def delRss(self, db, del_rss):  # delete rss from db
+        db.execute('delete from articles where rss = ?', (del_rss))
+        db.commit()
 
-    def editRss(self, old_rss, new_rss):
-        if not self.__isExist(old_rss):
-            raise Exception('no RSS to edit')
-        elif self.__isExist(new_rss):
-            raise Exception('new RSS is already exist')
+    def editRss(self, db, old_rss, new_rss):
         if not self.__isValidRss(new_rss):
             raise Exception('new RSS is invalid')
-        self.__updateRssStore('edit', old_rss, new_rss)
+        db.execute('update articles SET rss = ? where rss = ?', (new_rss, old_rss))
+        db.commit()
 
-    def addRss(self, new_rss):
+    def addRss(self, db, new_rss):
         if self.__isExist(new_rss):
             raise Exception('can not add exist RSS') 
         if not self.__isValidRss(new_rss):
             raise Exception('new RSS is invalid')
-        self.__updateRssStore('add', new_rss)
-
-    def __updateRssStore(self, cmd, *rss):
-        if cmd == 'del':
-            self.url_list.remove(rss[0])
-        elif cmd == 'edit':
-            rss_idx = self.url_list.index(rss[0])
-            self.url_list[rss_idx] = rss[1]
-        elif cmd == 'add':
-            self.url_list.append(rss[0])
         
-        with open('./url_list.txt','w') as f:
-            for url in self.url_list:
-                if url == '':
-                    continue
-                f.write(url+'\n')
+        data = rssparser.getParsedRss(new_rss)
 
-    def __isExist(self, rss):
-        if rss in self.url_list:
-            return True
-        return False
+        db.execute('insert into articles (rss, author, url, title, description, published) values (?, ?, ?)', 
+                new_rss, data['author'], data['url'], data['title'], data['description'], data['published'])
+
 
     def __isValidRss(self, rss):
         try:
