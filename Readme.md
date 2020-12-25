@@ -22,7 +22,7 @@
 - url: 원본으로 갈 수 있도록 url 저장
 - title: 글 제목
 - description: 글 요약본
-- published: 이 글이 올라온 날짜
+- published: 이 글이 올라온 날짜 ( ex. Thu, 24 Dec 2020 02:09:32 +0900 )
 ```
 
 rss버전마다 다르게 인식하면 pk는 다르지만 내용은 같은게 나오나?
