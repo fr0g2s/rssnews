@@ -18,6 +18,7 @@
 ```
 - id(pk): 글을 구분하기위한 pk
 - author: 누가 이 글을 썻는지
+- rss: rss관리 시 
 - title: 글 제목
 - text: 글 내용 보기
 - url: 원본으로 갈 수 있도록 url 저장
