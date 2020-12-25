@@ -18,6 +18,7 @@
 ```
 - rss(pk): 어디서 파싱했는지 
 - author: 누가 이 글을 썻는지
+- title: 글 제목
 - text: 글 내용 보기
 - url: 원본으로 갈 수 있도록 url 저장
 - published: 최신 글 날짜(?) ex) Mon, 07 Dec 2020 20:26:11 +0900
