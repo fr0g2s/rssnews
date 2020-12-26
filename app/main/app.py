@@ -28,8 +28,8 @@ def init_db():
 def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
 
-@app.befre_connect()
-def before_connect():
+@app.befre_request()
+def before_request():
     g.db = connect_db()
 
 @app.teardown_request
