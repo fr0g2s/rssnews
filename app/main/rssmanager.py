@@ -1,5 +1,7 @@
 import rssparser
 import sqlite3
+import sys
+import feedparser
 
 class RssManager:
     def __init__(self):
@@ -18,59 +20,77 @@ class RssManager:
         return articles
 
     def delRss(self, db, del_rss):  # delete rss from db
-        db.execute('delete from articles where rss = ?', (del_rss))
+        if not self.__isExist(db, del_rss):
+            raise Exception('given RSS is not exist in DB: ', del_rss)
+
+        db.execute('delete from articles where rss = ?', [ del_rss ])
         db.commit()
 
     def editRss(self, db, old_rss, new_rss):
         if not self.__isValidRss(new_rss):
-            raise Exception('new RSS is invalid')
-        db.execute('update articles SET rss = ? where rss = ?', (new_rss, old_rss))
+            raise Exception('new RSS is invalid: ', new_rss)
+        db.execute('update articles SET rss = ? where rss = ?', [ new_rss, old_rss ])
         db.commit()
 
     def addRss(self, db, new_rss):
-        if self.__isExist(new_rss):
-            raise Exception('can not add exist RSS') 
+        if self.__isExist(db, new_rss):
+            raise Exception('new RSS is already exist in DB: ', new_rss)
         if not self.__isValidRss(new_rss):
-            raise Exception('new RSS is invalid')
+            raise Exception('new RSS is invalid: ', new_rss)
         
-        data = rssparser.getParsedRss(new_rss)
+        data = rssparser.RssParser().getParsedRss(new_rss)
 
-        db.execute('insert into articles (rss, author, url, title, description, published) values (?, ?, ?)', 
-                new_rss, data['author'], data['url'], data['title'], data['description'], data['published'])
+        db.execute('insert into articles (rss, author, url, title, description, published) values (?,?,?,?,?,?)', 
+                [ new_rss, data['author'], data['url'], data['title'], data['description'], data['published'] ])
 
+    def __isExist(self, db, rss):
+        cur = db.execute('select rss from articles where rss = ?', [ rss ])
+        if cur.fetchone():
+            return True
+        return False
 
     def __isValidRss(self, rss):
         try:
             f = feedparser.parse(rss)
         except Exception as e:
+            print('[-] RssManager: __isValidRss Error:', e)
             return False
         return True
 
+def test_interface_tail(rmgr):
+    print(rmgr.getArticles(db))
+    print('='*50)
+
 if __name__ == "__main__": # for test
-    if hasattr(ssl, '_create_unverified_context'):
-            ssl._create_default_https_context = ssl._create_unverified_context
     rmgr = RssManager()
+    db = sqlite3.connect('/tmp/rssnews.db')
+    print('[*] First ')
+    test_interface_tail(rmgr)
+
+    print('[*] Delete RSS ')
+    try:
+        rmgr.delRss(db, 'https://rss.blog.naver.com/turttle2s.xml')
+    except Exception as e:
+        print('[-] RssManager.delRss Error: ', e)
+    test_interface_tail(rmgr)
+
+    print('[*] Del invalid rss ')
+    try:
+        rmgr.delRss(db, 'invlid.rss')
+    except Exception as e:
+        print('[-] RssManager.delRss Error: ', e)
+    test_interface_tail(rmgr)
     
-    print('[*] Test Start [*]')
-    print('[+] Init RSS list: ', rmgr.getRssList())
-
+    print('[*] Add new RSS ')
     try:
-        rmgr.delRss('https://rss.blog.naver.com/turttle2s.xml')
+        rmgr.addRss(db, 'https://rss.blog.naver.com/turttle2s.xml')
     except Exception as e:
-        print(e)
-    print('[+] after delete RSS: ', rmgr.getRssList())
-    print('-'*100)
-
+        print('[-] RssManager.addRss Error: ', e)
+    test_interface_tail(rmgr)
+    
+    print('[*] Add invalid RSS')
     try:
-        rmgr.addRss('https://rss.blog.naver.com/turttle2s.xml')
+        rmgr.addRss(db, 'rss.blog.naver.com/turttle2s.xml')
     except Exception as e:
-        print(e)
-    print('[+] after add RSS: ', rmgr.getRssList())
-    print('-'*100)
-
-    try:
-        rmgr.editRss('https://rss.blog.naver.com/turttle2s.xml', 'test')
-    except Exception as e:
-        print(e)
-    print('[+] after edit RSS: ', rmgr.getRssList())
-    print('-'*100)
+        print('[-] RssManager.addRss Error: ', e)
+    test_interface_tail(rmgr)
