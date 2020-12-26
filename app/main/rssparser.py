@@ -1,6 +1,7 @@
 import feedparser
 import ssl
 import sqlite3
+import sys
 
 class RssParser:
     def __init__(self):
@@ -22,7 +23,13 @@ class RssParser:
 
     def getParsedRss(self, rss):  # return parsed data with dict format
         f = feedparser.parse(rss)
-        recent_f = self.__getRecentEntries(f)
+        try:
+            recent_f = self.__getRecentEntries(f)
+        except Exception as e:
+            print('wrong rss or no recent article')
+            print('your rss: %s' % rss)
+            sys.exit(0)
+
         data = {}
         data['author'] = self.__getAuthor(recent_f)
         data['title'] = self.__getTitle(recent_f)
@@ -33,4 +40,14 @@ class RssParser:
 
         return data
 
+if __name__ == '__main__':
+    rpsr = RssParser()
+    print('[*] test for parsing rss')
+    data = rpsr.getParsedRss('https://rss.blog.naver.com/turttle2s.xml')
+    print(data)
+    print('='*50)
 
+    print('[*] test for wrong rss')
+    data = rpsr.getParsedRss('rss.blog.naver.com/turttle2s.xml')
+    print(data)
+    print('='*50)
