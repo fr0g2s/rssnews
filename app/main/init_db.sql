@@ -1,5 +1,5 @@
-drop table if exists rss_entries;
-create table rss_entries (
+drop table if exists articles;
+create table articles (
     id integer primary key autoincrement,
     rss string not null,
     author string not null,
