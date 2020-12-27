@@ -26,6 +26,8 @@ class RssManager:
         db.commit()
 
     def editRss(self, db, old_rss, new_rss):
+        if self.__isExist(old_rss):
+            raise Exception('old RSS is invalid: ', old_rss)
         if not self.__isValidRss(new_rss):
             raise Exception('new RSS is invalid: ', new_rss)
         db.execute('update articles SET rss = ? where rss = ?', [ new_rss, old_rss ])
