@@ -15,6 +15,7 @@
 
 
 #### DB 필드
+articles
 ```
 - id(pk): 글을 구분하기위한 pk
 - author: 누가 이 글을 썻는지
@@ -24,5 +25,10 @@
 - description: 글 요약본
 - published: 이 글이 올라온 날짜 ( ex. Thu, 24 Dec 2020 02:09:32 +0900 )
 ```
+entries
+```
+- rss(pk): 파싱해올 rss
+- author: 누가 썻는가?
+- published: 최근 글 올라온 날짜
+```
 
-rss버전마다 다르게 인식하면 pk는 다르지만 내용은 같은게 나오나?
