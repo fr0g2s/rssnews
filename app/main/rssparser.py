@@ -26,9 +26,9 @@ class RssParser:
         try:
             recent_f = self.__getRecentEntries(f)
         except Exception as e:
-            print('wrong rss or no recent article')
-            print('your rss: %s' % rss)
-            sys.exit(0)
+            print('[-] RssParser.getParsedRss Error: ', e)
+            print('your rss:', rss)
+            return False
 
         data = {}
         data['author'] = self.__getAuthor(recent_f)
