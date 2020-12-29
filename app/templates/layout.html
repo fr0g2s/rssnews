@@ -11,8 +11,6 @@
 
 <body>
 <div class=page>
-    <h1>new article</h1>
-
     {% for message in get_flashed_message() %}
         <div class=flash>{{ message }}</div>
     {% endfor %}

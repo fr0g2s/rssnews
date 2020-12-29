@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block body %}
+    {% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+    {% endif %}
+    <form action={{ url_for('edit_rss') }} method=GET>
+        <dl>
+            <dt>OLD RSS:
+            <dd><input type=text name=old>
+            <dt>NEW RSS:
+            <dd><input type=text name=new>
+            <dd><input type=submit value=Edit>
+        </dl>
+    </form>
+{% endblock %}
