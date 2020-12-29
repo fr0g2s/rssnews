@@ -20,7 +20,7 @@ class RssParser:
         return f.description
     def __getPublished(self, f):
         return f.published
-
+    
     def getParsedRss(self, rss):  # return parsed data with dict format
         f = feedparser.parse(rss)
         try:
