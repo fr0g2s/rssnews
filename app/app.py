@@ -5,15 +5,24 @@ from flask import Flask, request, render_template, flash, redirect, url_for, g
 from flask import current_app as app
 
 import sqlite3
-import rssparser
-import rssmanager
+from rssmgr import rssparser
+from rssmgr import rssmanager
 import ssl
 
 app = Flask(__name__)
 
 @app.route('/')
 def show_main():
+    return render_template('/main.html')
+
+@app.route('/articles')
+def show_articles():
     return render_template('/show-articles.html')
+
+@app.route('/entries')
+def show_entries():
+    entries = rssmanager.RssManager().getEntries(g.db)
+    return render_template('/show-entries.html', entries=entries)
 
 @app.route('/add', methods=['GET'])
 def add_rss():
@@ -65,9 +74,9 @@ def init_session():
 
 def init_db():
     with closing(connect_db()) as db:
-        with app.open_resource('init_articles.sql') as f:
+        with app.open_resource('articles_init.sql') as f:
             db.cursor().executescript(f.read().decode('utf-8'))
-        with app.open_resource('init_entries.sql') as f:
+        with app.open_resource('entries_init.sql') as f:
             db.cursor().executescript(f.read().decode())
         db.commit()
 

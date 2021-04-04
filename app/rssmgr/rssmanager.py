@@ -1,4 +1,4 @@
-import rssparser
+from . import rssparser
 import sqlite3
 import feedparser
 
@@ -18,8 +18,8 @@ class RssManager:
         return articles
 
     def getEntries(self, db):
-        cur = db.execute('select rss, author, published from entries')
-        entries = [dict(rss=row[0], author=row[1], published=row[2]) for row in cur.fetchall()]
+        cur = db.execute('select rss, author from entries')
+        entries = [dict(rss=row[0], author=row[1]) for row in cur.fetchall()]
         return entries
 
     def updateRss(self, db):    # update published in entries

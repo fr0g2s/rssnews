@@ -8,3 +8,5 @@ create table articles (
     description string not null,
     published string not null
 );
+
+-- insert into articles () values ();

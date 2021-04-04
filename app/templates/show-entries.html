@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block body %}
+    <ul class=entries>
+    {% for entrie in entries %}
+        <li><h2>{{ entrie.title }}</h2>
+        {{ entrie.rss|safe }}
+        {{ entrie.author|safe }}
+    {% endfor %}
+
+    </ul>
+{% endblock %}

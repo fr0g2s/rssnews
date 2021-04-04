@@ -15,7 +15,7 @@
 
 
 #### DB 필드
-articles
+articles (rss에서 가져온 글)
 ```
 - id(pk): 글을 구분하기위한 pk
 - author: 누가 이 글을 썻는지
@@ -25,10 +25,9 @@ articles
 - description: 글 요약본
 - published: 이 글이 올라온 날짜 ( ex. Thu, 24 Dec 2020 02:09:32 +0900 )
 ```
-entries
+entries (rss 주소)
 ```
 - rss(pk): 파싱해올 rss
 - author: 누가 썻는가?
-- published: 최근 글 올라온 날짜
 ```
 
